@@ -32,6 +32,13 @@ To install and run this project locally:
    npm install
    npm run dev
 ```
+create .env file and add :
+
+```bash
+VITE_AMADEUS_BASE_URL=https://test.api.amadeus.com/v1
+VITE_AMADEUS_API_KEY=#ur key
+VITE_AMADEUS_API_SECRET=#ur key
+```
 ## 📂 Project Structure
 This project follows a feature-based folder structure:
 ### 📁 Benefits of Feature-Based Organization
