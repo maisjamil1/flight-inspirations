@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { getFlightDestinations } from "@/components/features/FlightInspirations/api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { useTableData } from "@/hooks/useTableData";
 import { DateCell } from "./components/DateCell";
 import EditableCell from "./components/EditableCell";
 import { FilterInput } from "./components/FilterInput";
+import { DraggableHeader } from "./components/DraggableHeader";
 import type { TableData } from "@/types/tableTypes";
 import {
   createColumnHelper,
@@ -22,6 +23,7 @@ import {
   getCoreRowModel,
   useReactTable,
   getFilteredRowModel,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 
 const FlightInspirations = () => {
@@ -39,8 +41,6 @@ const FlightInspirations = () => {
     clearFilter,
     setFlightDestinations,
   } = useTableData();
-
-
 
   const handleSubmit = async () => {
     if (!origin) return;
@@ -118,11 +118,42 @@ const FlightInspirations = () => {
     });
   }, [data, editedCells, setFilter, updateCell, columnHelper]);
 
+  const [columnOrder, setColumnOrder] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (columns.length > 0 && columnOrder.length === 0) {
+      setColumnOrder(columns.map((column) => column.id as string));
+    }
+  }, [columns]);
+
+  const reorderColumn = (draggedColumnId: string, targetColumnId: string) => {
+    setColumnOrder((currentOrder) => {
+      const newOrder = [...currentOrder];
+      const draggedIndex = newOrder.indexOf(draggedColumnId);
+      const targetIndex = newOrder.indexOf(targetColumnId);
+
+      if (draggedIndex === -1 || targetIndex === -1) return currentOrder;
+
+      newOrder.splice(draggedIndex, 1);
+      newOrder.splice(targetIndex, 0, draggedColumnId);
+
+      return newOrder;
+    });
+  };
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    state: {
+      pagination: {
+        pageSize: 10,
+        pageIndex: 0,
+      },
+      columnOrder,
+    },
   });
 
   return (
@@ -185,17 +216,11 @@ const FlightInspirations = () => {
                 {table.getHeaderGroups().map((headerGroup) => (
                   <tr key={headerGroup.id} className="border-b bg-muted/50">
                     {headerGroup.headers.map((header) => (
-                      <th
+                      <DraggableHeader
                         key={header.id}
-                        className="p-2 text-left align-top text-sm font-medium text-muted-foreground"
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </th>
+                        header={header}
+                        onReorder={reorderColumn}
+                      />
                     ))}
                   </tr>
                 ))}
@@ -215,6 +240,33 @@ const FlightInspirations = () => {
                 ))}
               </tbody>
             </table>
+            <div className="flex items-center justify-between px-2 py-4">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  Next
+                </Button>
+              </div>
+              <div className="flex items-center gap-1 text-sm">
+                <div>Page</div>
+                <strong>
+                  {table.getState().pagination.pageIndex + 1} of{" "}
+                  {table.getPageCount()}
+                </strong>
+              </div>
+            </div>
           </div>
         </div>
       )}
