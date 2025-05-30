@@ -32,7 +32,7 @@ To install and run this project locally:
    npm install
    npm run dev
 ```
-create .env file and add :
+#### create .env file and add :
 
 ```bash
 VITE_AMADEUS_BASE_URL=https://test.api.amadeus.com/v1
