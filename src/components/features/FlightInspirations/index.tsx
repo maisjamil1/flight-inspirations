@@ -1,14 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { getFlightDestinations } from "@/components/features/FlightInspirations/api";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CalendarIcon, Save, Search } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
+import { Save } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { useTableData } from "@/hooks/useTableData";
@@ -25,6 +18,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
+import FlightSearchBar from "@/components/features/FlightInspirations/components/FlightSearchBar.tsx";
 
 const FlightInspirations = () => {
   const [origin, setOrigin] = useState("MAD");
@@ -121,7 +115,7 @@ const FlightInspirations = () => {
   const [columnOrder, setColumnOrder] = useState<string[]>([]);
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 10
+    pageSize: 10,
   });
 
   useEffect(() => {
@@ -135,7 +129,7 @@ const FlightInspirations = () => {
       pageIndex,
       pageSize,
     }),
-    [pageIndex, pageSize]
+    [pageIndex, pageSize],
   );
 
   const reorderColumn = (draggedColumnId: string, targetColumnId: string) => {
@@ -169,45 +163,13 @@ const FlightInspirations = () => {
   return (
     <div className="container mx-auto p-4 space-y-6">
       <h1 className="text-2xl font-bold">Flight Inspirations</h1>
-
-      <div className="flex items-center gap-4 mb-6">
-        <Input
-          placeholder="Origin city code (e.g. MAD)"
-          value={origin}
-          onChange={(e) => setOrigin(e.target.value.toUpperCase())}
-          className="max-w-xs"
-        />
-
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="w-[200px] justify-start text-left"
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {departureDate ? (
-                format(departureDate, "PPP")
-              ) : (
-                <span>Select date</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent align="start" className="p-0">
-            <Calendar
-              mode="single"
-              selected={departureDate}
-              onSelect={setDepartureDate}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-
-        <Button onClick={handleSubmit} variant="default">
-          <Search className="mr-2 h-4 w-4" />
-          Search
-        </Button>
-      </div>
-
+      <FlightSearchBar
+        origin={origin}
+        setOrigin={setOrigin}
+        departureDate={departureDate}
+        setDepartureDate={setDepartureDate}
+        handleSubmit={handleSubmit}
+      />
       {loading && <p className="text-muted-foreground">Loading...</p>}
 
       {!loading && data.length > 0 && (
@@ -242,7 +204,7 @@ const FlightInspirations = () => {
                       <td key={cell.id} className="p-2">
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </td>
                     ))}
