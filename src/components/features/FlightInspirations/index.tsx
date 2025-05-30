@@ -161,7 +161,7 @@ const FlightInspirations = () => {
   });
 
   return (
-    <div className="container mx-auto p-4 space-y-6">
+    <div className="container py-6 space-y-6">
       <h1 className="text-2xl font-bold">Flight Inspirations</h1>
       <FlightSearchBar
         origin={origin}
@@ -182,11 +182,11 @@ const FlightInspirations = () => {
             </Button>
           </div>
 
-          <div className="border rounded-lg overflow-auto">
+          <div className="border rounded-lg overflow-auto bg-card">
             <table className="w-full">
               <thead>
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id} className="border-b bg-muted/50">
+                  <tr key={headerGroup.id} className="border-b bg-muted">
                     {headerGroup.headers.map((header) => (
                       <DraggableHeader
                         key={header.id}
@@ -199,7 +199,7 @@ const FlightInspirations = () => {
               </thead>
               <tbody>
                 {table.getRowModel().rows.map((row) => (
-                  <tr key={row.id} className="border-b hover:bg-muted/50">
+                  <tr key={row.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                     {row.getVisibleCells().map((cell) => (
                       <td key={cell.id} className="p-2">
                         {flexRender(
@@ -212,7 +212,7 @@ const FlightInspirations = () => {
                 ))}
               </tbody>
             </table>
-            <div className="flex items-center justify-between px-2 py-4">
+            <div className="flex items-center justify-between px-2 py-4 border-t bg-card">
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"

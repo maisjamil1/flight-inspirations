@@ -27,7 +27,7 @@ const EditableCell = memo(({ value: initialValue, rowIndex, columnId, isEdited, 
   };
 
   return (
-    <div className={`${isEdited ? "bg-amber-100 dark:bg-amber-950" : ""}`}>
+    <div className={`${isEdited ? "bg-amber-100 dark:bg-amber-900/50" : ""}`}>
       <Input
         value={value}
         onChange={handleChange}
