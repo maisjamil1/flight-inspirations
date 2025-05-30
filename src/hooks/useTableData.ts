@@ -1,11 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
 import type { TableData, FlightDestination } from "@/types/tableTypes";
-import debounce from "lodash/debounce";
 
 const transformFlightDestinations = (
   destinations: FlightDestination[],
 ): TableData[] => {
-  return destinations.map((dest, index) => ({
+  return destinations.map((dest) => ({
     origin: dest.origin,
     destination: dest.destination,
     departureDate: dest.departureDate,
@@ -55,16 +54,20 @@ export const useTableData = () => {
     setEditedCells(new Set(editedCells).add(`${rowIndex}-${columnId}`));
   };
 
-  const debouncedFilter = useMemo(
-    () =>
-      debounce((column: string, value: string) => {
-        setColumnFilters((prev) => ({
-          ...prev,
-          [column]: value,
-        }));
-      }, 300),
-    [],
-  );
+  const setFilter = (column: string, value: string) => {
+    setColumnFilters((prev) => ({
+      ...prev,
+      [column]: value,
+    }));
+  };
+
+  const clearFilter = (column: string) => {
+    setColumnFilters((prev) => {
+      const newFilters = { ...prev };
+      delete newFilters[column];
+      return newFilters;
+    });
+  };
 
   const filteredData = useMemo(() => {
     return tableData.filter((row) => {
@@ -82,7 +85,9 @@ export const useTableData = () => {
     editedCells,
     updateCell,
     saveChanges,
-    debouncedFilter,
+    columnFilters,
+    setFilter,
+    clearFilter,
     setFlightDestinations,
   };
 };

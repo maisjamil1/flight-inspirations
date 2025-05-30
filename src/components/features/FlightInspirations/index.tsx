@@ -13,6 +13,8 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { useTableData } from "@/hooks/useTableData";
 import { DateCell } from "./components/DateCell";
+import EditableCell from "./components/EditableCell";
+import { FilterInput } from "./components/FilterInput";
 import type { TableData } from "@/types/tableTypes";
 import {
   createColumnHelper,
@@ -32,9 +34,13 @@ const FlightInspirations = () => {
     editedCells,
     updateCell,
     saveChanges,
-    debouncedFilter,
+    columnFilters,
+    setFilter,
+    clearFilter,
     setFlightDestinations,
   } = useTableData();
+
+
 
   const handleSubmit = async () => {
     if (!origin) return;
@@ -42,7 +48,9 @@ const FlightInspirations = () => {
     try {
       const params = {
         origin,
-        ...(departureDate && { departureDate: format(departureDate, "yyyy-MM-dd") })
+        ...(departureDate && {
+          departureDate: format(departureDate, "yyyy-MM-dd"),
+        }),
       };
       const response = await getFlightDestinations(params);
       setFlightDestinations(response.data);
@@ -61,19 +69,19 @@ const FlightInspirations = () => {
     if (data.length === 0) return [];
 
     return Object.keys(data[0]).map((key) => {
-      const isDateColumn = [
-        "departureDate","returnDate"
-      ].includes(key);
+      const isDateColumn = ["departureDate", "returnDate"].includes(key);
 
       return columnHelper.accessor((row) => row[key], {
         id: key,
         header: () => (
           <div className="font-semibold">
             {key.replace("_", " ")}
-            <Input
+            <FilterInput
+              columnKey={key}
               placeholder={`Search ${key}...`}
-              className="mt-2 h-8 text-xs"
-              onChange={(e) => debouncedFilter(key, e.target.value)}
+              value={columnFilters[key] || ""}
+              onFilter={setFilter}
+              onClear={clearFilter}
             />
           </div>
         ),
@@ -95,12 +103,12 @@ const FlightInspirations = () => {
                   }
                 />
               ) : (
-                <Input
+                <EditableCell
                   value={value}
-                  onChange={(e) =>
-                    updateCell(rowIndex, columnId, e.target.value)
-                  }
-                  className="border-none bg-transparent h-8 px-2 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  rowIndex={rowIndex}
+                  columnId={columnId}
+                  isEdited={isEdited}
+                  onUpdate={updateCell}
                 />
               )}
             </div>
@@ -108,7 +116,7 @@ const FlightInspirations = () => {
         },
       });
     });
-  }, [data, editedCells, debouncedFilter, updateCell, columnHelper]);
+  }, [data, editedCells, setFilter, updateCell, columnHelper]);
 
   const table = useReactTable({
     data,
@@ -185,7 +193,7 @@ const FlightInspirations = () => {
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext(),
+                              header.getContext()
                             )}
                       </th>
                     ))}
@@ -199,7 +207,7 @@ const FlightInspirations = () => {
                       <td key={cell.id} className="p-2">
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext(),
+                          cell.getContext()
                         )}
                       </td>
                     ))}
