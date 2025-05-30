@@ -119,12 +119,24 @@ const FlightInspirations = () => {
   }, [data, editedCells, setFilter, updateCell, columnHelper]);
 
   const [columnOrder, setColumnOrder] = useState<string[]>([]);
+  const [{ pageIndex, pageSize }, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10
+  });
 
   useEffect(() => {
     if (columns.length > 0 && columnOrder.length === 0) {
       setColumnOrder(columns.map((column) => column.id as string));
     }
   }, [columns]);
+
+  const pagination = useMemo(
+    () => ({
+      pageIndex,
+      pageSize,
+    }),
+    [pageIndex, pageSize]
+  );
 
   const reorderColumn = (draggedColumnId: string, targetColumnId: string) => {
     setColumnOrder((currentOrder) => {
@@ -148,12 +160,10 @@ const FlightInspirations = () => {
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     state: {
-      pagination: {
-        pageSize: 10,
-        pageIndex: 0,
-      },
+      pagination,
       columnOrder,
     },
+    onPaginationChange: setPagination,
   });
 
   return (
