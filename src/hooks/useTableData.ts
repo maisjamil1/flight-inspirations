@@ -33,9 +33,9 @@ export const useTableData = () => {
   useEffect(() => {
     if (flightDestinations.length > 0) {
       const newTableData = transformFlightDestinations(flightDestinations);
-      if (tableData.length === 0) {
-        setTableData(newTableData);
-      }
+      setTableData(newTableData);
+      setEditedCells(new Set());
+      setColumnFilters({});
     }
   }, [flightDestinations]);
 
