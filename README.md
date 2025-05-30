@@ -1,54 +1,55 @@
-# React + TypeScript + Vite
+# ✈️ Flight Inspirations
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+> **Live Demo**: [https://flight-inspirations.vercel.app](https://flight-inspirations.vercel.app)  
+> **GitHub Repo**: [https://github.com/maisjamil1/flight-inspirations](https://github.com/maisjamil1/flight-inspirations)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React 19**
+- **Vite**
+- **Tailwind CSS**
+- **shadcn/ui** for accessible UI components
+- **@tanstack/react-table** for dynamic tables
+- **axios** for HTTP requests
+- **date-fns** for date manipulation
+- **Radix UI** for headless UI primitives
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+---
+
+## 🛠️ Getting Started
+
+To install and run this project locally:
+
+
+   ```bash
+   git clone https://github.com/maisjamil1/flight-inspirations.git
+   cd flight-inspirations
+   npm install
+   npm run dev
 ```
+## 📂 Project Structure
+This project follows a feature-based folder structure:
+### 📁 Benefits of Feature-Based Organization
+- Cohesion: Related files are grouped together.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Isolation: Easier to manage and scale features independently.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Team Collaboration: Teams can work on separate features without conflict.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- Scalability: New features integrate smoothly without disrupting existing ones.
+
+- Testing: Easier to write and maintain focused unit tests.
+
+## 🎨 Why Tailwind CSS and shadcn/ui?
+- Tailwind CSS provides utility-first styling for rapid development and consistent design. It allows complete control over UI without writing custom CSS.
+
+- shadcn/ui builds on top of Radix UI, offering ready-made, accessible components styled with Tailwind. It ensures best practices in accessibility and UI consistency with minimal setup.
+
+
+## 🔮 Future Enhancements
+✅ Use React Query to handle and cache API requests efficiently.
+
+✅ Integrate Zustand as a lightweight global state management solution.
