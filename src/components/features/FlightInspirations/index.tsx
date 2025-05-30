@@ -1,7 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { getFlightDestinations } from "@/components/features/FlightInspirations/api";
-import { Button } from "@/components/ui/button";
-import { Save } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { useTableData } from "@/components/features/FlightInspirations/hooks/useTableData";
@@ -20,6 +18,9 @@ import {
 } from "@tanstack/react-table";
 import FlightSearchBar from "@/components/features/FlightInspirations/components/FlightSearchBar.tsx";
 import TablePagination from "@/components/features/FlightInspirations/components/TablePagination.tsx";
+import LoadingState from "@/components/features/FlightInspirations/components/LoadingState.tsx";
+import EmptyState from "@/components/features/FlightInspirations/components/EmptyState.tsx";
+import TableHeader from "@/components/features/FlightInspirations/components/TableHeader.tsx";
 
 const FlightInspirations = () => {
   const [origin, setOrigin] = useState("MAD");
@@ -171,17 +172,11 @@ const FlightInspirations = () => {
         setDepartureDate={setDepartureDate}
         handleSubmit={handleSubmit}
       />
-      {loading && <p className="text-muted-foreground">Loading...</p>}
+      {loading && <LoadingState />}
 
       {!loading && data.length > 0 && (
         <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Flight Data</h2>
-            <Button onClick={saveChanges} variant="default">
-              <Save className="mr-2 h-4 w-4" />
-              Save Changes
-            </Button>
-          </div>
+          <TableHeader onSaveChanges={saveChanges} />
 
           <div className="border rounded-lg overflow-auto bg-card">
             <table className="w-full">
@@ -221,11 +216,7 @@ const FlightInspirations = () => {
         </div>
       )}
 
-      {!loading && data.length === 0 && (
-        <div className="text-center py-10 text-muted-foreground">
-          <p>No flight data available. Search for flights to get started.</p>
-        </div>
-      )}
+      {!loading && data.length === 0 && <EmptyState />}
     </div>
   );
 };

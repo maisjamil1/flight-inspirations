@@ -1,5 +1,7 @@
 # ✈️ Flight Inspirations
 
+![Dashboard UI](dashbordUI.png)
+
 
 > **Live Demo**: [https://flight-inspirations.vercel.app](https://flight-inspirations.vercel.app)  
 > **GitHub Repo**: [https://github.com/maisjamil1/flight-inspirations](https://github.com/maisjamil1/flight-inspirations)
@@ -53,3 +55,5 @@ This project follows a feature-based folder structure:
 ✅ Use React Query to handle and cache API requests efficiently.
 
 ✅ Integrate Zustand as a lightweight global state management solution.
+
+✅ More refactoring
