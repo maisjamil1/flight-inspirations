@@ -2,7 +2,7 @@ import { useState } from "react";
 import { GripVertical } from "lucide-react";
 import { flexRender } from "@tanstack/react-table";
 import type { Header } from "@tanstack/react-table";
-import type { TableData } from "@/types/tableTypes";
+import type { TableData } from "@/components/features/FlightInspirations/types/tableTypes";
 
 interface DraggableHeaderProps {
   header: Header<TableData, unknown>;

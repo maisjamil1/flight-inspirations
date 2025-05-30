@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import type { TableData, FlightDestination } from "@/types/tableTypes";
+import type { TableData, FlightDestination } from "@/components/features/FlightInspirations/types/tableTypes.ts";
 
 const transformFlightDestinations = (
   destinations: FlightDestination[],

@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { useTableData } from "@/hooks/useTableData";
+import { useTableData } from "@/components/features/FlightInspirations/hooks/useTableData";
 import { DateCell } from "./components/DateCell";
 import EditableCell from "./components/EditableCell";
 import { FilterInput } from "./components/FilterInput";
 import { DraggableHeader } from "./components/DraggableHeader";
-import type { TableData } from "@/types/tableTypes";
+import type { TableData } from "@/components/features/FlightInspirations/types/tableTypes";
 import {
   createColumnHelper,
   flexRender,
@@ -19,6 +19,7 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import FlightSearchBar from "@/components/features/FlightInspirations/components/FlightSearchBar.tsx";
+import TablePagination from "@/components/features/FlightInspirations/components/TablePagination.tsx";
 
 const FlightInspirations = () => {
   const [origin, setOrigin] = useState("MAD");
@@ -199,7 +200,10 @@ const FlightInspirations = () => {
               </thead>
               <tbody>
                 {table.getRowModel().rows.map((row) => (
-                  <tr key={row.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                  <tr
+                    key={row.id}
+                    className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                  >
                     {row.getVisibleCells().map((cell) => (
                       <td key={cell.id} className="p-2">
                         {flexRender(
@@ -212,33 +216,7 @@ const FlightInspirations = () => {
                 ))}
               </tbody>
             </table>
-            <div className="flex items-center justify-between px-2 py-4 border-t bg-card">
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  Next
-                </Button>
-              </div>
-              <div className="flex items-center gap-1 text-sm">
-                <div>Page</div>
-                <strong>
-                  {table.getState().pagination.pageIndex + 1} of{" "}
-                  {table.getPageCount()}
-                </strong>
-              </div>
-            </div>
+            <TablePagination table={table} />
           </div>
         </div>
       )}
